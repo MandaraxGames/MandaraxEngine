@@ -1,0 +1,40 @@
+@echo off
+
+REM === No-CRT Windows Development Template ===
+@echo off
+set PROJECT_NAME=noWinCRT
+
+:: 1. Compiler-only flags (Note: /link is moved to the execution line for clarity)
+set COMPILER_FLAGS=/Oi- /Zl /TC /GS- /D "UNICODE" /D "_UNICODE" /I"..\src"
+
+:: 2. Linker-only flags
+set LINKER_FLAGS=/NODEFAULTLIB /ENTRY:mainCRTStartup /SUBSYSTEM:CONSOLE /STACK:0x100000,0x100000
+
+:: 3. Libraries
+set LIBS=kernel32.lib user32.lib gdi32.lib
+
+REM Create build directory if it doesn't exist
+if not exist build mkdir build
+
+pushd build
+del /q *.*
+
+echo Building %PROJECT_NAME%...
+
+if "%1" == "debug" (
+
+  echo Building Debug...
+  cl /nologo /WX /Od /Zi %COMPILER_FLAGS% /Fe:"%PROJECT_NAME%.exe" ..\src\*.c /link %LIBS% %LINKER_FLAGS%
+) else (
+  echo Building Release...
+  cl /nologo /O2 %COMPILER_FLAGS% /Fe:"%PROJECT_NAME%.exe" ..\src\*.c /link %LIBS% %LINKER_FLAGS%
+)
+
+if %errorlevel% neq 0 (
+  echo Build failed!
+  exit /b %errorlevel%
+)
+
+echo Build successful
+popd
+
