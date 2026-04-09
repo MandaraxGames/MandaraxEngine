@@ -1,10 +1,9 @@
 @echo off
 
 REM === No-CRT Windows Development Template ===
-@echo off
 set PROJECT_NAME=noWinCRT
 
-:: 1. Compiler-only flags (Note: /link is moved to the execution line for clarity)
+:: 1. Compiler-only flags
 set COMPILER_FLAGS=/Oi- /Zl /TC /GS- /D "UNICODE" /D "_UNICODE" /I"..\src"
 
 :: 2. Linker-only flags
